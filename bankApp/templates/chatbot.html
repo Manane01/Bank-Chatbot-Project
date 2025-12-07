@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Assistant - Chatbot Bancaire{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <!-- EN-TÊTE DU CHATBOT -->
+        <div class="chat-header card mb-4 border-0 bg-primary text-white">
+            <div class="card-body py-3">
+                <div class="d-flex align-items-center">
+                    <!-- ICÔNE DU CHATBOT -->
+                    <div class="chatbot-icon me-3">
+                        <i class="fas fa-robot fa-lg"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <h1 class="h4 mb-1">Assistant Bancaire</h1>
+                        <p class="mb-0 small opacity-75">
+                            Je suis là pour vous aider avec vos questions bancaires
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ZONE DE CONVERSATION -->
+        <div class="chat-container bg-white rounded shadow-sm mb-3">
+            <div class="chat-messages" id="chatMessages">
+                <!-- Messages chargés dynamiquement -->
+            </div>
+            
+            <!-- Indicateur de frappe -->
+            <div class="typing-indicator" id="typingIndicator">
+                <span>Assistant tape...</span>
+            </div>
+        </div>
+
+        <!-- ZONE DE SAISIE -->
+        <div class="chat-input-container">
+            <div class="input-group">
+                <input type="text" 
+                       class="form-control border-primary" 
+                       id="userInput" 
+                       placeholder="Posez votre question ici... Ex: Comment consulter mon solde ?"
+                       autocomplete="off">
+                <div class="mx-2"></div>
+                <button class="btn btn-primary px-4" id="sendButton">
+                    Envoyer
+                </button>
+            </div>
+            
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        initChatbot();
+        
+        // Gestion des boutons de suggestion
+        document.querySelectorAll('.suggestion-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.getElementById('userInput').value = this.textContent;
+                document.getElementById('userInput').focus();
+            });
+        });
+    });
+</script>
+<!-- Ajout de Font Awesome pour les icônes -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+{% endblock %}

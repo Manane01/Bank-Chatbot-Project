@@ -1,0 +1,14 @@
+# Environnement virtuel
+bank_env/
+
+# Cache Python
+__pycache__/
+
+# Données et modèles
+data/
+
+# Fichiers d'environnement
+.env
+
+# Configuration
+config.py

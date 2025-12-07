@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+
+{% block title %}Historique - Conversations{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-12"> 
+        <!-- En-tête historique -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1 class="text-primary">Historique des Conversations</h1>
+                <p class="text-muted">Cliquez sur une question pour voir la réponse</p>
+            </div>
+            <span class="badge bg-primary fs-6" id="conversationCount">{{ conversations|length }} conversations</span>
+        </div>             
+
+        <!-- Filtres -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Rechercher</label>
+                        <input type="text" class="form-control" id="searchInput" placeholder="Rechercher dans les conversations...">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Filtrer par catégorie</label>
+                        <select class="form-select" id="categoryFilter">
+                            <option value="">Toutes les catégories</option>
+                            {% for category in categories %}
+                            <option value="{{ category }}">{{ category }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>      
+
+        <!-- Liste des conversations -->
+        <div class="conversation-list" id="conversationList">
+            {% if conversations %}
+                <div id="conversationsContainer">
+                    {% for conv in conversations %}
+                    <div class="card mb-3 conversation-item" data-category="{{ conv.category }}">
+                        <div class="card-body p-0">
+                            <!-- Question utilisateur (toujours visible) -->
+                            <div class="question-section p-3 border-bottom" 
+                                 style="cursor: pointer;"
+                                 onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="flex-grow-1">
+                                        <h6 class="mb-1 text-primary">{{ conv.user_message }}</h6>
+                                        <small class="text-muted">{{ conv.timestamp }}</small>
+                                    </div>
+                                    <div class="text-end">
+                                        <span class="badge {% if conv.category == 'Inconnu' %}bg-warning{% else %}bg-success{% endif %} me-2">
+                                            {{ conv.category }}
+                                        </span>
+                                        {% if conv.confidence %}
+                                        <span class="badge bg-info">{{ "%.0f"|format(conv.confidence * 100) }}%</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Réponse assistant (cachée par défaut) -->
+                            <div class="answer-section p-3 bg-light" style="display: none;">
+                                <div class="d-flex">
+                                    <div class="flex-grow-1">
+                                        <p class="mb-0 mt-1">{{ conv.bot_response }}</p>
+                                        {% if conv.confidence %}
+                                        <small class="text-muted">Niveau de confiance: {{ "%.2f"|format(conv.confidence) }}</small>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="no-results-container">
+                    <div class="text-center py-5">
+                        <h4 class="text-muted">Aucune conversation enregistrée</h4>
+                        <p class="text-muted">Vos conversations avec l'assistant apparaîtront ici</p>
+                        <a href="{{ url_for('chatbot') }}" class="btn btn-primary">
+                            Commencer une conversation
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('searchInput');
+        const categoryFilter = document.getElementById('categoryFilter');
+        const conversationList = document.getElementById('conversationList');
+        const conversationCount = document.getElementById('conversationCount');
+        const conversationsContainer = document.getElementById('conversationsContainer');
+        
+        // Initialiser les éléments de conversation après le chargement
+        let conversationItems = document.querySelectorAll('.conversation-item');
+        const totalConversations = conversationItems.length;
+        
+        function filterConversations() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const selectedCategory = categoryFilter.value;
+            
+            let visibleCount = 0;
+            
+            conversationItems.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                const category = item.getAttribute('data-category');
+                
+                const matchesSearch = text.includes(searchTerm);
+                const matchesCategory = !selectedCategory || category === selectedCategory;
+                
+                if (matchesSearch && matchesCategory) {
+                    item.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            
+            // Mettre à jour le compteur
+            conversationCount.textContent = `${visibleCount} conversation${visibleCount !== 1 ? 's' : ''}`;
+            
+            // Afficher le message "Aucun résultat" seulement si vraiment aucun résultat
+            if (visibleCount === 0 && totalConversations > 0) {
+                if (!document.getElementById('noResultsMessage')) {
+                    const noResultsDiv = document.createElement('div');
+                    noResultsDiv.id = 'noResultsMessage';
+                    noResultsDiv.className = 'no-results-container';
+                    noResultsDiv.innerHTML = `
+                        <div class="text-center py-5">
+                            <h4 class="text-muted">Aucune conversation trouvée</h4>
+                            <p class="text-muted">Aucune conversation ne correspond à vos critères de recherche</p>
+                        </div>
+                    `;
+                    conversationList.appendChild(noResultsDiv);
+                }
+                conversationsContainer.style.display = 'none';
+            } else {
+                // Cacher le message "Aucun résultat" s'il existe
+                const noResultsMessage = document.getElementById('noResultsMessage');
+                if (noResultsMessage) {
+                    noResultsMessage.remove();
+                }
+                conversationsContainer.style.display = 'block';
+            }
+        }
+        
+        searchInput.addEventListener('input', filterConversations);
+        categoryFilter.addEventListener('change', filterConversations);
+
+        // Fermer toutes les réponses au chargement
+        document.querySelectorAll('.answer-section').forEach(section => {
+            section.style.display = 'none';
+        });
+        
+        // Réinitialiser les références après un certain délai
+        setTimeout(() => {
+            conversationItems = document.querySelectorAll('.conversation-item');
+        }, 100);
+    });
+</script>
+
+<!-- Ajout de Font Awesome pour les icônes -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+{% endblock %}

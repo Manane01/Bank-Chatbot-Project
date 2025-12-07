@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Connexion - Bank Connect{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-5 col-md-7">
+        <!-- Carte de connexion -->
+        <div class="card border-0 shadow-lg">
+            <div class="card-header bg-primary text-white text-center py-4">
+                <h3 class="mb-0">Connexion</h3>
+                <p class="mb-0 mt-2 opacity-75">Accédez à votre espace personnel</p>
+            </div>
+            
+            <div class="card-body p-5">
+                <form id="loginForm" method="POST" action="{{ url_for('login') }}">
+                    <div class="mb-4">
+                        <label for="email" class="form-label text-primary fw-semibold">Adresse email</label>
+                        <input type="email" 
+                               class="form-control form-control-lg border-primary" 
+                               id="email" 
+                               name="email"
+                               placeholder="votre@email.com"
+                               required>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="password" class="form-label text-primary fw-semibold">Mot de passe</label>
+                        <input type="password" 
+                               class="form-control form-control-lg border-primary" 
+                               id="password" 
+                               name="password"
+                               placeholder="Votre mot de passe"
+                               required>
+                    </div>
+                    
+                    <div class="d-grid mb-3">
+                        <button type="submit" class="btn btn-primary btn-lg fw-semibold">
+                            <i class="fas fa-sign-in-alt me-2"></i>Se connecter
+                        </button>
+                    </div>
+                    
+                    <div class="text-center">
+                        <p class="text-muted mb-0">
+                            Pas encore de compte ? 
+                            <a href="{{ url_for('register') }}" class="text-primary text-decoration-none fw-semibold">
+                                Créer un compte
+                            </a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Message d'information -->
+        <div class="text-center mt-4">
+            <div class="d-inline-flex align-items-center bg-light rounded-pill px-4 py-2">
+                <i class="fas fa-shield-alt text-primary me-2"></i>
+                <small class="text-muted">Vos données sont sécurisées et confidentielles</small>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

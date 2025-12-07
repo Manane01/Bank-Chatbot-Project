@@ -1,0 +1,833 @@
+/* 
+PALETTE DE 3 COULEURS :
+- Bleu bancaire (#1a4b8c) : Couleur principale
+- Blanc (#ffffff) : Arrière-plan et textes clairs  
+- Gris (#6c757d) : Textes secondaires et bordures
+*/
+
+/* --------------------------
+STYLES GÉNÉRAUX
+-------------------------- */
+:root {
+    --primary-color: #1a4b8c;
+    --secondary-color: #6c757d;
+    --background-color: #ffffff;
+}
+
+body {
+    background-color: var(--background-color);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+}
+
+/* -----------------------
+INTERFACE DU CHATBOT
+-------------------------- */
+
+/* En-tête du chatbot */
+.chat-header {
+    border-radius: 15px !important;
+    box-shadow: 0 4px 12px rgba(26, 75, 140, 0.2);
+}
+
+/* Icône du chatbot */
+.chatbot-icon {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.chatbot-icon i {
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+}
+
+/* Zone de conversation */
+.chat-container {
+    height: 60vh;
+    border: 2px solid var(--primary-color);
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.chat-messages {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    background: #f8fafc;
+}
+
+/* STYLE DES MESSAGES */
+.message {
+    margin-bottom: 20px;
+    max-width: 85%;
+}
+
+.user-message {
+    margin-left: auto;
+    margin-right: 0;
+}
+
+.bot-message {
+    margin-right: auto;
+    margin-left: 0;
+}
+
+/* Conteneur de message avec coins adaptatifs */
+.message-container {
+    padding: 12px 16px;
+    border-radius: 18px;
+    position: relative;
+    max-width: 100%;
+    word-wrap: break-word;
+}
+
+/* MESSAGE UTILISATEUR - FOND BLEU */
+.user-message .message-container {
+    background: var(--primary-color);
+    color: white;
+    border-bottom-right-radius: 5px;
+}
+
+.user-message .message-content {
+    color: white;
+    margin-bottom: 8px;
+    line-height: 1.5;
+    font-size: 1.1rem; 
+}
+
+.user-message .message-time {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.85rem; 
+    text-align: right;
+    margin-top: 5px;
+}
+
+/* MESSAGE BOT - FOND BLANC */
+.bot-message .message-container {
+    background: white;
+    color: #333;
+    border: 1px solid #e0e0e0;
+    border-bottom-left-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.bot-message .message-content {
+    color: #333;
+    margin-bottom: 8px;
+    line-height: 1.5;
+    font-size: 1.1rem; 
+}
+
+.bot-message .message-time {
+    color: #666;
+    font-size: 0.85rem; 
+    text-align: right;
+    margin-top: 5px;
+}
+
+/* Métadonnées des messages bot */
+.message-meta {
+    font-size: 0.9rem; 
+    color: var(--secondary-color);
+    margin-top: 8px;
+    padding: 8px 12px; 
+    background: rgba(26, 75, 140, 0.05);
+    border-radius: 6px;
+    border-left: 3px solid var(--primary-color);
+}
+
+/* Indicateur de frappe */
+.typing-indicator {
+    padding: 14px 16px; 
+    color: var(--secondary-color);
+    font-style: italic;
+    font-size: 1rem;
+    display: none;
+    background: white;
+    border-top: 1px solid #e0e0e0;
+}
+
+/* Zone de saisie */
+.chat-input-container {
+    background: white;
+    border: 2px solid var(--primary-color);
+    border-radius: 15px;
+    padding: 15px;
+    box-shadow: 0 4px 12px rgba(26, 75, 140, 0.1);
+}
+
+.chat-input-container .form-control {
+    border: 1px solid var(--primary-color);
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 1.1rem;
+}
+
+.chat-input-container .form-control:focus {
+    box-shadow: 0 0 0 0.2rem rgba(26, 75, 140, 0.25);
+    border-color: var(--primary-color);
+}
+
+/* ESPACE entre input et bouton */
+.chat-input-container .input-group {
+    gap: 12px;
+}
+
+.chat-input-container .btn {
+    border-radius: 10px;
+    padding: 14px 24px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.chat-input-container .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(26, 75, 140, 0.3);
+}
+
+/* ------------------------------------
+STYLES POUR LES ICÔNES DE CONVERSATION
+--------------------------------------- */
+
+/* Icônes au niveau de la conversation */
+.bot-icon-message, .user-icon-message {
+    width: 45px; 
+    height: 45px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 5px;
+}
+
+.bot-icon-message {
+    background: rgba(26, 75, 140, 0.1);
+    color: var(--primary-color);
+}
+
+.user-icon-message {
+    background: var(--primary-color);
+    color: white;
+}
+
+.bot-icon-message i, .user-icon-message i {
+    font-size: 1.4rem;
+}
+
+/* Ajustement de l'alignement */
+.message .d-flex {
+    align-items: flex-start;
+}
+
+/* --------------------------
+COMPOSANTS CARDS
+-------------------------- */
+.service-card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.service-card:hover {
+    transform: translateY(-5px);
+}
+
+.service-icon {
+    font-size: 3rem;
+}
+
+/* --------------------------
+PAGE HISTORIQUE 
+-------------------------- */
+.conversation-item {
+    border-left: 4px solid var(--primary-color);
+    transition: box-shadow 0.3s ease;
+}
+
+.conversation-item:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.question-section {
+    transition: background-color 0.3s ease;
+    border-radius: 8px 8px 0 0;
+}
+
+.question-section:hover {
+    background-color: #f8f9fa;
+}
+
+.answer-section {
+    border-radius: 0 0 8px 8px;
+    animation: fadeIn 0.3s ease-in;
+    border-top: 1px solid var(--secondary-color);
+}
+
+/* Styles pour l'historique */
+.question-section h6 {
+    font-size: 1.1rem; 
+    line-height: 1.4;
+}
+
+.answer-section p {
+    font-size: 1.1rem; 
+    line-height: 1.5;
+}
+
+.question-section .text-muted,
+.answer-section .text-muted {
+    font-size: 0.9rem; 
+}
+
+/* FORCER UNE HAUTEUR MINIMALE POUR LA PAGE */
+main.container {
+    min-height: calc(100vh - 200px);
+}
+
+.conversation-list {
+    min-height: 300px;
+}
+
+/* Style pour le message "Aucun résultat" */
+.no-results-container {
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@keyframes fadeIn {
+    from { 
+        opacity: 0; 
+        transform: translateY(-10px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+/* Styles pour les badges de niveau de confiance */
+.badge.bg-info {
+    background-color: var(--primary-color) !important;
+}
+
+.badge.bg-warning {
+    background-color: #ffc107 !important;
+    color: #000 !important;
+}
+
+.badge.bg-success {
+    background-color: #198754 !important;
+}
+
+/* --------------------------
+STYLES POUR LA PAGE D'ACCUEIL 
+-------------------------- */
+
+/* Cartes de catégories d'aide */
+.help-category-card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.help-category-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 25px rgba(26, 75, 140, 0.15);
+    border-color: var(--primary-color);
+}
+
+.category-icon {
+    transition: transform 0.3s ease;
+}
+
+.help-category-card:hover .category-icon {
+    transform: scale(1.1);
+}
+
+/* Numéros des étapes */
+.step-number {
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(26, 75, 140, 0.2);
+}
+
+/* Sections spacing */
+.hero-section {
+    padding: 3rem 0 1rem 0;
+}
+
+.help-section {
+    padding: 2rem 0;
+}
+
+.services-section {
+    padding: 2rem 0;
+}
+
+/* Styles pour l'en-tête */
+.hero-section .display-4 {
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.hero-section .lead {
+    font-size: 1.25rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Styles pour les titres de section */
+.help-section h2 {
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.help-section .text-muted {
+    font-size: 1.1rem;
+}
+
+/* Styles pour les cartes de services existantes */
+.services-section .service-card {
+    border-radius: 12px;
+    padding: 0;
+}
+
+.services-section .service-card .card-body {
+    padding: 2rem;
+}
+
+/* Styles pour la section "Comment ça marche" */
+.info-section {
+    border-radius: 15px;
+    margin-top: 2rem;
+}
+
+.info-section h3 {
+    font-weight: 600;
+}
+
+.step-number {
+    width: 60px;
+    height: 60px;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem auto;
+}
+
+/* --------------------------
+NAVIGATION
+-------------------------- */
+.navbar-brand {
+    font-weight: 600;
+    font-size: 1.5rem;
+}
+
+.navbar-nav .nav-link {
+    font-weight: 500;
+    margin: 0 10px;
+}
+
+.navbar-nav .nav-link:hover {
+    color: var(--background-color) !important;
+}
+
+/* --------------------------
+ANIMATIONS ET EFFETS
+-------------------------- */
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.help-category-card {
+    animation: slideInUp 0.5s ease-out;
+}
+
+.help-category-card:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.help-category-card:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.help-category-card:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+@keyframes messageSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.message {
+    animation: messageSlideIn 0.3s ease-out;
+}
+
+/* --------------------------
+UTILITAIRES
+-------------------------- */
+.text-primary {
+    color: var(--primary-color) !important;
+}
+
+.bg-primary {
+    background-color: var(--primary-color) !important;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: #153a6d;
+    border-color: #153a6d;
+}
+
+.btn-outline-primary {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+
+/* Amélioration de la lisibilité */
+.card-title {
+    font-weight: 600;
+}
+
+.lead {
+    font-weight: 400;
+}
+
+/* Espacement amélioré */
+.mb-3 {
+    margin-bottom: 1.5rem !important;
+}
+
+.mb-4 {
+    margin-bottom: 2rem !important;
+}
+
+.mb-5 {
+    margin-bottom: 3rem !important;
+}
+
+/* --------------------------
+RESPONSIVE DESIGN
+-------------------------- */
+@media (max-width: 768px) {
+    /* Chatbot responsive */
+    .chat-container {
+        height: 55vh;
+    }
+    
+    .message {
+        max-width: 90%;
+    }
+    
+    .message-container {
+        padding: 10px 14px;
+    }
+    
+    .message-content {
+        font-size: 1rem; 
+    }
+    
+    .suggestions-section .btn {
+        font-size: 0.95rem; 
+        padding: 7px 14px; 
+    }
+    
+    /* Zone de saisie responsive */
+    .chat-input-container {
+        padding: 12px;
+    }
+    
+    .chat-input-container .form-control {
+        padding: 12px 14px; 
+        font-size: 1rem; 
+    }
+    
+    .chat-input-container .input-group {
+        gap: 8px;
+    }
+    
+    .chat-input-container .btn {
+        padding: 12px 20px; 
+        font-size: 1rem;
+    }
+    
+    .chatbot-icon {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .chat-header .card-body {
+        padding: 1rem !important;
+    }
+    
+    /* Historique responsive */
+    .question-section .d-flex {
+        flex-direction: column;
+        align-items: flex-start !important;
+    }
+    
+    .question-section .text-end {
+        margin-top: 10px;
+        width: 100%;
+        text-align: left !important;
+    }
+    
+    .badge {
+        margin-bottom: 5px;
+    }
+    
+    /* Historique responsive - texte */
+    .question-section h6 {
+        font-size: 1rem; 
+    }
+    
+    .answer-section p {
+        font-size: 1rem;
+    }
+    
+    /* Page d'accueil responsive */
+    .help-category-card {
+        margin-bottom: 1.5rem;
+    }
+    
+    .hero-section h1 {
+        font-size: 2.2rem;
+    }
+    
+    .hero-section .lead {
+        font-size: 1.1rem;
+    }
+    
+    .services-section .service-card {
+        margin-bottom: 1.5rem;
+    }
+    
+    .step-number {
+        width: 50px;
+        height: 50px;
+        font-size: 1.25rem;
+    }
+    
+    .help-section h2 {
+        font-size: 1.8rem;
+    }
+    
+    /* Icônes responsive */
+    .bot-icon-message, .user-icon-message {
+        width: 40px; 
+        height: 40px; 
+    }
+    
+    .bot-icon-message i, .user-icon-message i {
+        font-size: 1.2rem; 
+    }
+    
+    .message .d-flex {
+        gap: 12px;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero-section {
+        padding: 2rem 0 0.5rem 0;
+    }
+    
+    .hero-section h1 {
+        font-size: 1.8rem;
+    }
+    
+    .hero-section .lead {
+        font-size: 1rem;
+    }
+    
+    .help-section,
+    .services-section {
+        padding: 1.5rem 0;
+    }
+    
+    .help-category-card .card-body {
+        padding: 1.5rem !important;
+    }
+    
+    .services-section .service-card .card-body {
+        padding: 1.5rem;
+    }
+    
+    /* Chatbot mobile */
+    .chat-header .card-body {
+        padding: 1rem !important;
+    }
+    
+    .chat-header h1 {
+        font-size: 1.1rem !important;
+    }
+    
+    .chat-header p {
+        font-size: 0.8rem !important;
+    }
+    
+    .suggestions-section {
+        padding: 8px 0;
+    }
+    
+    .suggestion-btn {
+        font-size: 0.9rem; 
+        padding: 6px 12px; 
+    }
+    
+    .message {
+        max-width: 95%;
+    }
+    
+    .message-container {
+        padding: 8px 12px;
+        border-radius: 15px;
+    }
+    
+    .message-content {
+        font-size: 0.95rem; 
+    }
+    
+    /* Zone de saisie mobile */
+    .chat-input-container .form-control {
+        padding: 10px 12px; 
+        font-size: 1rem; 
+    }
+    
+    .chat-input-container .btn {
+        padding: 10px 16px; 
+        font-size: 0.95rem; 
+    }
+    
+    /* Icônes mobile */
+    .bot-icon-message, .user-icon-message {
+        width: 38px; 
+        height: 38px; 
+    }
+    
+    .bot-icon-message i, .user-icon-message i {
+        font-size: 1.1rem; 
+    }
+    
+    .message .d-flex {
+        gap: 10px;
+    }
+    
+    /* Historique mobile */
+    .question-section h6 {
+        font-size: 0.95rem;
+    }
+    
+    .answer-section p {
+        font-size: 0.95rem;
+    }
+}
+
+/* Scrollbar */
+.chat-messages::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chat-messages::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 10px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb:hover {
+    background: #153a6d;
+}
+
+/* États de focus */
+.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(26, 75, 140, 0.25);
+}
+
+/* Transitions globales */
+.btn, .card, .form-control {
+    transition: all 0.3s ease;
+}
+
+/* Ombres cohérentes */
+.shadow-sm {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+}
+
+.shadow {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15) !important;
+}
+
+/* Badges */
+.badge {
+    font-weight: 500;
+}
+
+/* Text selection */
+::selection {
+    background-color: rgba(26, 75, 140, 0.1);
+    color: var(--primary-color);
+}
+
+/* Loading states */
+.loading {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+/* Accessibility */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
