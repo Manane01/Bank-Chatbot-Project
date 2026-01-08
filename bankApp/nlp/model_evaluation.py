@@ -110,14 +110,9 @@ def comprehensive_evaluation(model, vectorizer, X_test, y_test, categories):
     return accuracy
 
 def integrate_evaluation():
-    # Charge les modèles pré-entraînés
-    result = load_trained_models()
-    if result is None:
-        print("Impossible de charger les modèles. Entraînement nécessaire.")
-        return
+    # Import des modèles depuis model_taining.py
+    from model_training import tfidf, rfc, df
     
-    tfidf, rfc, model_embed, df, embeddings, categories = result
-
     # Préparer les données pour l'évaluation
     X = tfidf.transform(df["tokens"])
     y = df["category"]

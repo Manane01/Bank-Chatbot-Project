@@ -3,16 +3,7 @@ import pandas as pd
 import numpy as np
 from spellchecker import SpellChecker
 from sklearn.metrics.pairwise import cosine_similarity
-import sys
-import os
-
-# Déterminer le bon chemin d'importation
-try:
-    # Essayer l'import absolu d'abord
-    from bankApp.nlp.model_training import load_trained_models
-except ImportError:
-    # Sinon, essayer l'import relatif
-    from model_training import load_trained_models
+from bankApp.nlp.model_training import load_trained_models
 
 # Configuration
 DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "data")
